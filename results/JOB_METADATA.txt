@@ -1,0 +1,59 @@
+THIS FILE CONTAINS THE METADATA ABOUT SYSTEM AND RUNTIME
+
+
+-------System Info-------
+Operating System Name: Darwin
+Nodename: Ashiquls-MacBook-Pro.local
+Release: 18.7.0
+Version: Darwin Kernel Version 18.7.0: Tue Aug 20 16:57:14 PDT 2019; root:xnu-4903.271.2~2/RELEASE_X86_64
+
+-------Python and Package Versions------- 
+Python Version: 3.7.3
+Sigproextractor Version: 0.0.5.76
+SigprofilerPlotting Version: 1.0.5
+SigprofilerMatrixGenerator Version: 1.0.17
+Pandas version: 0.24.2
+Numpy version: 1.16.2
+Scipy version: 1.3.1
+Scikit-learn version: 0.20.3
+Nimfa version: 1.3.4
+
+-------Vital Parameters Used for the execution -------
+input_type: vcf
+inputdata: vcftest
+startProcess: 1
+endProcess: 5
+totalIterations: 8
+cpu: -1
+hierarchy: False
+refgen: GRCh38
+genome_build: GRCh38
+mtype: ['default'] 
+init: nndsvdar
+
+-------Date and Time Data------- 
+Date and Clock time when the execution started: 2019-10-22 14:44:27.627449
+
+Signature extraction for SBS96 completed for 1 signatures for 0:00:00.294995! TimeStamp: 2019-10-22 14:44:43.416817
+
+Signature extraction for SBS96 completed for 2 signatures for 0:00:00.714674! TimeStamp: 2019-10-22 14:44:44.706182
+
+Signature extraction for SBS96 completed for 3 signatures for 0:00:01.840260! TimeStamp: 2019-10-22 14:44:47.485070
+
+Signature extraction for SBS96 completed for 4 signatures for 0:00:02.558470! TimeStamp: 2019-10-22 14:44:51.394213
+
+Signature extraction for SBS96 completed for 5 signatures for 0:00:02.878649! TimeStamp: 2019-10-22 14:44:56.089862
+
+Signature extraction for DBS78 completed for 1 signatures for 0:00:00.312128! TimeStamp: 2019-10-22 14:45:05.185485
+
+Signature extraction for DBS78 completed for 2 signatures for 0:00:00.519847! TimeStamp: 2019-10-22 14:45:06.097467
+
+Signature extraction for DBS78 completed for 3 signatures for 0:00:00.629848! TimeStamp: 2019-10-22 14:45:07.502523
+
+Signature extraction for DBS78 completed for 4 signatures for 0:00:00.927440! TimeStamp: 2019-10-22 14:45:09.372744
+
+Signature extraction for DBS78 completed for 5 signatures for 0:00:01.346053! TimeStamp: 2019-10-22 14:45:12.093948
+
+Date and Clock time when the execution ended: 2019-10-22 14:45:16.810502
+-------Job Status------- 
+Analysis of mutational signatures completed successfully! Total execution time: 0:00:49.183053. Results can be found in: [results] folder

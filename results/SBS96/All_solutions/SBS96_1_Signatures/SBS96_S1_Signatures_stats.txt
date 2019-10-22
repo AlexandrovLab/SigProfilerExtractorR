@@ -1,0 +1,2 @@
+Signatures	Stability	Total Mutations
+Signature A	1.0	41914
