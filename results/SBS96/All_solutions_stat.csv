@@ -1,6 +1,0 @@
-,Stability (Avg Silhouette),Minimum Stability,Matrix Frobenius%,Mean Sample L1%,Maximum Sample L1%,Mean Sample L2%,Maximum Sample L2%,Significant Decrease of L2,Mean Sample KL,Maximum Sample KL
-1,1.0,1.0,43.83%,43.28%,64.04%,45.98%,59.77%,True,0.1415,0.2749
-2,0.99,0.98,6.93%,24.71%,46.64%,26.37%,48.3%,True,0.0626,0.188
-3*,0.9,0.83,5.95%,21.36%,34.76%,22.72%,39.5%,True,0.049,0.1355
-4,0.54,-0.15,5.82%,20.82%,34.94%,22.2%,39.44%,False,0.0465,0.1232
-5,0.39,-0.0,5.5%,20.0%,34.59%,21.07%,36.21%,True,0.043,0.1185
