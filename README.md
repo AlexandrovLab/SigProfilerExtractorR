@@ -1,4 +1,4 @@
-[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://osf.io/s93d5/wiki/home/) [![License](https://img.shields.io/badge/License-BSD\%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause) [![Build Status](https://travis-ci.com/AlexandrovLab/SigProfilerMatrixGeneratorR.svg?branch=master)](https://travis-ci.com/AlexandrovLab/SigProfilerMatrixGeneratorR)
+[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://osf.io/t6j7u/wiki/home/) [![License](https://img.shields.io/badge/License-BSD\%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause) [![Build Status](https://travis-ci.com/AlexandrovLab/SigProfilerMatrixGeneratorR.svg?branch=master)](https://travis-ci.com/AlexandrovLab/SigProfilerMatrixGeneratorR)
 
 # SigProfilerExtractorR
 An R wrapper for running the SigProfilerExtractor framework.
