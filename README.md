@@ -80,7 +80,8 @@ Example:
 The example file will generated in the working directory
 
 
-**Decomposition of signature**
+**Decomposition of signatures to COSMIC signatures**
+
 SigProfilerExtractorR offer a separate function, decomposition, that decomposes a tab delimited file containing a set of De Novo signatures to the COSMIC signatures and attribute them to a given set of sample.
 ```
 help(decomposition)
