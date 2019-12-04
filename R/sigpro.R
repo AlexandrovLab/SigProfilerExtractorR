@@ -105,6 +105,6 @@ install <- function(genome, custom=F, rsync=F, bash=T, ftp=T){
   os <- reticulate::import("os")
   sys <- reticulate::import("sys")
   genInstall <- reticulate::import("SigProfilerMatrixGenerator.install")
-  genInstall$install(genome, custom, rsync, bash, ftp)
+  genInstall$install(genome, rsync=F,  ftp=T)
   sys$stdout$flush()
 }
