@@ -37,8 +37,7 @@ sigprofilerextractor <- function(input_type, output, inputdata, refgen = 'GRCh37
   replicates=as.integer(replicates)
   exome=FALSE
   cpu = as.integer(cpu)
-  print(mtype)
-  sigpro$sigProfilerExtractor(input_type, output, inputdata, refgen = 'GRCh37',genome_build="GRCh37",startProcess=minsigs, endProcess = maxsigs, totalIterations=replicates, mtype=mtype, exome=exome, init=init)
+  sigpro$sigProfilerExtractor(input_type, output, inputdata, refgen = 'GRCh37',genome_build="GRCh37",startProcess=minsigs, endProcess = maxsigs, totalIterations=replicates, mtype="96", exome=exome, init=init)
   sys$stdout$flush()
 
 }
