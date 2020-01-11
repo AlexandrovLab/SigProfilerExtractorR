@@ -29,7 +29,7 @@
 sigprofilerextractor <- function(input_type, output, inputdata, refgen = 'GRCh37', genome_build="GRCh37",minsigs = 1, maxsigs = 3,  replicates=5, mtype = c('96,DINUC,ID'), init="random",exome=F, cpu=-1) {
 
   sys <- reticulate::import("sys")
-  sigpro <- reticulate::import("sigproextractor.sigpro")
+  sigpro <- reticulate::import("SigProfilerExtractor.sigpro")
 
 
   minsigs=as.integer(minsigs)
@@ -84,7 +84,7 @@ importdata <- function(datatype){
 #'
 #' @examples
 decomposition <- function(signatures, activities, samples, output, mutation_type="96", genome_build="GRCh37", verbose=F){
-  decompose <-reticulate::import("sigproextractor.decomposition")
+  decompose <-reticulate::import("SigProfilerExtractor.decomposition")
   result = decomposition$decompose(signatures, activities, samples, output, mutation_type="96", genome_build="GRCh37", verbose=False)
   return(result)
 }
