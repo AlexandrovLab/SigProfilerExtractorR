@@ -35,7 +35,7 @@ sigprofilerextractor <- function(input_type, output, input_data, refgen = 'GRCh3
   minsigs=as.integer(minsigs)
   maxsigs = as.integer(maxsigs)
   replicates=as.integer(replicates)
-  exome=FALSE
+  exome=F
   cpu = as.integer(cpu)
   sigpro$sigProfilerExtractor(input_type,
                               output,
@@ -43,14 +43,14 @@ sigprofilerextractor <- function(input_type, output, input_data, refgen = 'GRCh3
                               reference_genome="GRCh37",
                               opportunity_genome = "GRCh37",
                               context_type = "default",
-                              exome = FALSE,
+                              exome = F,
                               minimum_signatures=1,
                               maximum_signatures=25,
                               nmf_replicates=500,
-                              resample = TRUE,
+                              resample = T,
                               batch_size=1,
                               cpu=-1,
-                              gpu=FALSE,
+                              gpu=F,
                               nmf_init="random",
                               precision= "single",
                               matrix_normalization= "gmm",
@@ -63,14 +63,14 @@ sigprofilerextractor <- function(input_type, output, input_data, refgen = 'GRCh3
                               nnls_remove_penalty=0.01,
                               de_novo_fit_penalty=0.02,
                               initial_remove_penalty=0.05,
-                              refit_denovo_signatures=TRUE,
+                              refit_denovo_signatures=T,
                               clustering_distance="cosine",
-                              export_probabilities=TRUE,
-                              make_decomposition_plots=TRUE,
+                              export_probabilities=T,
+                              make_decomposition_plots=T,
                               stability=0.8,
                               min_stability=0.2,
                               combined_stability=1.0,
-                              get_all_signature_matrices= FALSE)
+                              get_all_signature_matrices= F)
 sys$stdout$flush()
 }
 
@@ -117,7 +117,7 @@ importdata <- function(datatype){
 #' @examples
 decomposition <- function(signatures, activities, samples, output, mutation_type="96", genome_build="GRCh37", verbose=F){
   decompose <-reticulate::import("SigProfilerExtractor.decomposition")
-  result = decomposition$decompose(signatures, activities, samples, output, mutation_type="96", genome_build="GRCh37", verbose=False)
+  result = decomposition$decompose(signatures, activities, samples, output, mutation_type="96", genome_build="GRCh37", verbose=F)
   return(result)
 }
 
