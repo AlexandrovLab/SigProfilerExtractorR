@@ -37,9 +37,41 @@ sigprofilerextractor <- function(input_type, output, inputdata, refgen = 'GRCh37
   replicates=as.integer(replicates)
   exome=FALSE
   cpu = as.integer(cpu)
-  sigpro$sigProfilerExtractor(input_type, output, inputdata, refgen = 'GRCh37',genome_build="GRCh37",startProcess=minsigs, endProcess = maxsigs, totalIterations=replicates, exome=exome, init=init)
-  sys$stdout$flush()
-
+  sigpro$sigProfilerExtractor(input_type,
+                              output,
+                              input_data,
+                              reference_genome="GRCh37",
+                              opportunity_genome = "GRCh37",
+                              context_type = "default",
+                              exome = False,
+                              minimum_signatures=1,
+                              maximum_signatures=25,
+                              nmf_replicates=500,
+                              resample = True,
+                              batch_size=1,
+                              cpu=-1,
+                              gpu=False,
+                              nmf_init="random",
+                              precision= "single",
+                              matrix_normalization= "gmm",
+                              seeds= "random",
+                              min_nmf_iterations= 10000,
+                              max_nmf_iterations=1000000,
+                              nmf_test_conv= 10000,
+                              nmf_tolerance= 1e-15,
+                              nnls_add_penalty=0.05,
+                              nnls_remove_penalty=0.01,
+                              de_novo_fit_penalty=0.02,
+                              initial_remove_penalty=0.05,
+                              refit_denovo_signatures=True,
+                              clustering_distance="cosine",
+                              export_probabilities=True,
+                              make_decomposition_plots=True,
+                              stability=0.8,
+                              min_stability=0.2,
+                              combined_stability=1.0,
+                              get_all_signature_matrices= False)
+sys$stdout$flush()
 }
 
 
