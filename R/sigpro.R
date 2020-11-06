@@ -70,7 +70,14 @@ sigprofilerextractor <- function(input_type,
   #exome=F
   #cpu = as.integer(cpu)
 
+  minimum_signatures=as.integer(minimum_signatures)
+  maximum_signatures=as.integer(maximum_signatures)
   min_nmf_iterations=as.integer(min_nmf_iterations)
+  max_nmf_iterations=as.integer(max_nmf_iterations)
+  nmf_test_conv= as.integer(nmf_test_conv)
+  batch_size=as.integer(batch_size)
+  cpu=as.integer(cpu)
+
   print("v1")
   sigpro$sigProfilerExtractor(input_type,
                               output,
