@@ -64,11 +64,11 @@ sigprofilerextractor <- function(input_type,
   sigpro <- reticulate::import("SigProfilerExtractor.sigpro")
 
 
-  minsigs=as.integer(minsigs)
-  maxsigs = as.integer(maxsigs)
-  replicates=as.integer(replicates)
-  exome=F
-  cpu = as.integer(cpu)
+  #minsigs=as.integer(minsigs)
+  #maxsigs = as.integer(maxsigs)
+  #replicates=as.integer(replicates)
+  #exome=F
+  #cpu = as.integer(cpu)
   print("v1")
   sigpro$sigProfilerExtractor(input_type,
                               output,
