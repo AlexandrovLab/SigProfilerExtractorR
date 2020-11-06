@@ -76,11 +76,19 @@ sigprofilerextractor <- function(input_type,
   nmf_replicates=as.integer(nmf_replicates)
   min_nmf_iterations=as.integer(min_nmf_iterations)
   max_nmf_iterations=as.integer(max_nmf_iterations)
+  nmf_tolerance=as.numeric(nmf_tolerance)
   nmf_test_conv= as.integer(nmf_test_conv)
+  nnls_add_penalty=as.numeric(nnls_add_penalty)
+  nnls_remove_penalty=as.numeric(nnls_remove_penalty)
+  de_novo_fit_penalty=as.numeric(de_novo_fit_penalty)
+  initial_remove_penalty=as.numeric(initial_remove_penalty)
+  stability=as.numeric(stability)
+  min_stability=as.numeric(min_stability)
+  combined_stability=as.numeric(combined_stability)
   batch_size=as.integer(batch_size)
   cpu=as.integer(cpu)
 
-  print("v1")
+
   sigpro$sigProfilerExtractor(input_type,
                               output,
                               input_data,
