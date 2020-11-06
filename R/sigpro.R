@@ -35,6 +35,7 @@ sigprofilerextractor <- function(input_type,
                                  exome = F,
                                  minimum_signatures=1,
                                  maximum_signatures=25,
+                                 nmf_replicates=500,
                                  resample = T,
                                  batch_size=1,
                                  cpu=-1,
@@ -72,6 +73,7 @@ sigprofilerextractor <- function(input_type,
 
   minimum_signatures=as.integer(minimum_signatures)
   maximum_signatures=as.integer(maximum_signatures)
+  nmf_replicates=as.integer(nm_replicates)
   min_nmf_iterations=as.integer(min_nmf_iterations)
   max_nmf_iterations=as.integer(max_nmf_iterations)
   nmf_test_conv= as.integer(nmf_test_conv)
@@ -88,6 +90,7 @@ sigprofilerextractor <- function(input_type,
                               exome = exome,
                               minimum_signatures=minimum_signatures,
                               maximum_signatures=maximum_signatures,
+                              nmf_replicates=nmf_replicates,
                               resample = resample,
                               batch_size=batch_size,
                               cpu=cpu,
