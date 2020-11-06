@@ -37,7 +37,7 @@ sigprofilerextractor <- function(input_type, output, input_data, refgen = 'GRCh3
   replicates=as.integer(replicates)
   exome=F
   cpu = as.integer(cpu)
-  print("I am here")
+  print("v1")
   sigpro$sigProfilerExtractor(input_type,
                               output,
                               input_data,
