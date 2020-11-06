@@ -70,7 +70,7 @@ sigprofilerextractor <- function(input_type,
   #exome=F
   #cpu = as.integer(cpu)
 
-  min_nmf_iterations=as.interger(min_nmf_iterations)
+  min_nmf_iterations=as.integer(min_nmf_iterations)
   print("v1")
   sigpro$sigProfilerExtractor(input_type,
                               output,
