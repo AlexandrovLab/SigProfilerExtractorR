@@ -26,7 +26,10 @@
 #' @export sigprofilerextractor
 #'
 #' @examples
-sigprofilerextractor <- function(input_type, output, input_data, refgen = 'GRCh37', genome_build="GRCh37",minsigs = 1, maxsigs = 3,  replicates=5, mtype = c('96,DINUC,ID'), init="random",exome=F, cpu=-1) {
+sigprofilerextractor <- function(input_type,
+                                 output,
+                                 input_data,
+                                 refgen = 'GRCh37', genome_build="GRCh37",minsigs = 1, maxsigs = 3,  replicates=5, mtype = c('96,DINUC,ID'), init="random",exome=F, cpu=-1) {
 
   sys <- reticulate::import("sys")
   sigpro <- reticulate::import("SigProfilerExtractor.sigpro")
@@ -47,7 +50,6 @@ sigprofilerextractor <- function(input_type, output, input_data, refgen = 'GRCh3
                               exome = F,
                               minimum_signatures=1,
                               maximum_signatures=25,
-                              nmf_replicates=integer(500),
                               resample = T,
                               batch_size=1,
                               cpu=-1,
