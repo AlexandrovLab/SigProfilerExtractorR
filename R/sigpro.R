@@ -280,7 +280,7 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
 
 
   sys$stdout$flush()
-  return(result)
+  return(results)
 
 }
 
