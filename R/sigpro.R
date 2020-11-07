@@ -259,7 +259,7 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
                   min_stability=0.2,
                   combined_stability=1.0,
                   statistics=T,
-                  select=None){
+                  select=NULL){
 
   stability=as.numeric(stability)
   min_stability=as.numeric(min_stability)
