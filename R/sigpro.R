@@ -204,6 +204,7 @@ decomposition <- function(signatures,
   de_novo_fit_penalty=as.numeric(de_novo_fit_penalty)
   initial_remove_penalty=as.numeric(initial_remove_penalty)
 
+  sys <- reticulate::import("sys")
   decomposition <-reticulate::import("SigProfilerExtractor.decomposition")
   result = decomposition$decompose(signatures,
                                    activities,
@@ -264,6 +265,7 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
   min_stability=as.numeric(min_stability)
   combined_stability=as.numeric(combined_stability)
 
+  sys <- reticulate::import("sys")
   model_selection <-reticulate::import("SigProfilerExtractor.estimate_best_solution")
   results=model_selection$estimate_solution(base_csvfile=base_csvfile,
                                             All_solution=All_solution,
@@ -273,7 +275,7 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
                                             stability=stability,
                                             min_stability=min_stability,
                                             combined_stability=combined_stability,
-                                            statistics=statistic,
+                                            statistics=statistics,
                                             select=select)
 
 
