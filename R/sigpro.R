@@ -219,7 +219,9 @@ decomposition <- function(signatures,
                                    make_decomposition_plots=make_decomposition_plots,
                                    connected_sigs=connected_sigs,
                                    verbose=verbose)
+  sys$stdout$flush()
   return(result)
+
 }
 
 
@@ -275,7 +277,7 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
                                             select=select)
 
 
-
+  sys$stdout$flush()
   return(result)
 
 }
