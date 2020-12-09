@@ -111,10 +111,10 @@ The list of available functions are:
 
 
 ### <a name="importdata"></a> importdata
-Imports the path of example data.
-importdata(datatype)
-datatype:	
-The type of example data. There are two types: 1."vcf", 2."matrix"
+Imports the path of example data.  
+importdata(datatype). 
+datatype:  	
+The type of example data. There are two types: 1."vcf", 2."matrix". 
 
 #### importdata Example
 
