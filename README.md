@@ -119,7 +119,7 @@ The type of example data. There are two types: 1."vcf", 2."matrix".
 #### importdata Example
 
 ```R
-from SigProfilerExtractor import sigpro as sig
+library("SigProfilerExtractorR")
 path_to_example_table = importdata("matrix")
 data = path_to_example_table 
 # This "data" variable can be used as a parameter of the "project" argument of the sigprofilerextractor function.
@@ -132,8 +132,8 @@ help(importdata)
     
 Extracts mutational signatures from an array of samples.
 
-```python 
-sigProfilerExtractor(input_type, out_put, input_data, reference_genome="GRCh37", opportunity_genome = "GRCh37", context_type = "default", exome = False, 
+```R 
+sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37", opportunity_genome = "GRCh37", context_type = "default", exome = False, 
                          minimum_signatures=1, maximum_signatures=10, nmf_replicates=100, resample = True, batch_size=1, cpu=-1, gpu=False, 
                          nmf_init="alexandrov-lab-custom", precision= "single", matrix_normalization= "100X", seeds= "none", 
                          min_nmf_iterations= 10000, max_nmf_iterations=1000000, nmf_test_conv= 10000, nmf_tolerance= 1e-15,nnls_add_penalty=0.05,
@@ -184,27 +184,23 @@ sigProfilerExtractor(input_type, out_put, input_data, reference_genome="GRCh37",
 |  | **export_probabilities** | Boolean | Defualt is True. If False, then doesn't create the probability matrix. | 
     
 #### sigProfilerExtractor Example
-```python    
+```R    
 
-from SigProfilerExtractor import sigpro as sig
-def main_function():
-    # to get input from vcf files
-    path_to_example_folder_containing_vcf_files = sig.importdata("vcf")
-    data = path_to_example_folder_containing_vcf_files # you can put the path to your folder containing the vcf     samples
-    sig.sigProfilerExtractor("vcf", "example_output", data, minimum_signatures=1, maximum_signatures=3)
-if __name__="__main__":
-   main_function()
+library("SigProfilerExtractorR")   
+# to get input from vcf files.  
+path_to_example_folder_containing_vcf_files = importdata("vcf").   
+data = path_to_example_folder_containing_vcf_files # you can put the path to your folder containing the vcf samples.  
+sigprofilerextractor("vcf", "example_output", data, minimum_signatures=1, maximum_signatures=10)
+
 
 #Wait untill the excecution is finished. The process may a couple of hours based on the size of the data.
 #Check the current working directory for the "example_output" folder.
 
-def main_function():    
-   # to get input from table format (mutation catalog matrix)
-   path_to_example_table = sig.importdata("matrix")
-   data = path_to_example_table # you can put the path to your tab delimited file containing the mutational catalog matrix/table
-   sig.sigProfilerExtractor("matrix", "example_output", data, opportunity_genome="GRCh38", minimum_signatures=1,            maximum_signatures=3)
-if __name__="__main__":
-   main_function()
+
+# to get input from table format (mutation catalog matrix)
+path_to_example_table = importdata("matrix")
+data = path_to_example_table # you can put the path to your tab delimited file containing the mutational catalog matrix/table
+sigprofilerextractor("matrix", "example_output", data, opportunity_genome="GRCh38", minimum_signatures=1,maximum_signatures=10)
 ```
 
 #### sigProfilerExtractor Output
@@ -214,7 +210,7 @@ To learn about the output, please visit https://osf.io/t6j7u/wiki/home/
 ### <a name="estimate_solution"></a> Estimation of the Optimum Solution
 Estimate the optimum solution (rank) among different number of solutions (ranks). 
 
-```python
+```R
 ebs.estimate_solution(base_csvfile="All_solutions_stat.csv", 
           All_solution="All_Solutions", 
           genomes="Samples.txt", 
