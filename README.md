@@ -211,14 +211,14 @@ To learn about the output, please visit https://osf.io/t6j7u/wiki/home/
 Estimate the optimum solution (rank) among different number of solutions (ranks). 
 
 ```R
-ebs.estimate_solution(base_csvfile="All_solutions_stat.csv", 
-          All_solution="All_Solutions", 
-          genomes="Samples.txt", 
-          output="results", 
-          title="Selection_Plot",
-          stability=0.8, 
-          min_stability=0.2, 
-          combined_stability=1.25)
+estimate_solution(base_csvfile, 
+          All_solution, 
+          genomes, 
+          output, 
+          title,
+          stability, 
+          min_stability, 
+          combined_stability)
 ```  
     
 | Parameter | Variable Type | Parameter Description |
@@ -233,9 +233,8 @@ ebs.estimate_solution(base_csvfile="All_solutions_stat.csv",
 | **combined_stability** | Float | Default is 1.0. The cutoff thresh-hold of the combined stability (sum of average and minimum stability). Solutions with combined stabilities below this thresh-hold will not be considered. |
         
 #### Estimation of the Optimum Solution Example
-```python 
-from SigProfilerExtractor import estimate_best_solution as ebs
-ebs.estimate_solution(base_csvfile="All_solutions_stat.csv", 
+```R 
+estimate_solution(base_csvfile="All_solutions_stat.csv", 
           All_solution="All_Solutions", 
           genomes="Samples.txt", 
           output="results", 
@@ -257,7 +256,7 @@ The files below will be generated in the output folder:
 
 Decomposes the De Novo Signatures into COSMIC Signatures and assigns COSMIC signatures into samples
 
-```python 
+```R 
 decompose(signatures, activities, samples,  output, signature_database=None, nnls_add_penalty=0.05, nnls_remove_penalty=0.01, initial_remove_penalty=0.05, de_novo_fit_penalty=0.02, genome_build="GRCh37", refit_denovo_signatures=True, make_decomposition_plots=True, connected_sigs=True, verbose=False)
 ``` 
 
@@ -275,19 +274,17 @@ decompose(signatures, activities, samples,  output, signature_database=None, nnl
 | **verbose** | Boolean | Prints statements. Default value is False.  |
         
 #### Decompose Example
-```python 
-from SigProfilerExtractor import decomposition as decomp
+```R
 signatures = "path/to/De_Novo_Solution_Signatures.txt"
 activities="path/to/De_Novo_Solution_Activities.txt"
 samples="path/to/Samples.txt"
 output="name or path/to/output"
-decomp.decompose(signatures, activities, samples, output, genome_build="GRCh37", verbose=False)
+decompose(signatures, activities, samples, output, genome_build="GRCh37", verbose=False)
 ```   
 
 #### Decompose Output   
 Values:
   The files below will be generated in the output folder:
-  - Cluster_of_Samples.txt
   - comparison_with_global_ID_signatures.csv
   - Decomposed_Solution_Activities.txt
   - Decomposed_Solution_Samples_stats.txt
@@ -301,20 +298,6 @@ Values:
 ### <a name="plotActivity"></a> Activity Stacked Bar Plot
 Generates a stacked bar plot showing activities in individuals
 
-```python 
-plotActivity(activity_file, output_file = "Activity_in_samples.pdf", bin_size = 50, log = False)
-``` 
-
-| Parameter | Variable Type | Parameter Description |
-| --------------------- | -------- |-------- |
-| **activity_file** | String | The standard output activity file showing the number of, or percentage of mutations attributed to each sample. The row names should be samples while the column names should be signatures. |
-| **output_file** | String | The path and full name of the output pdf file, including ".pdf" |
-| **bin_size** | Integer | Number of samples plotted per page, recommended: 50 |
-        
-#### Activity Stacked Bar Plot Example
-```bash 
-$ python plotActivity.py 50 sig_attribution_sample.txt test_out.pdf
-``` 
 
 ### GPU support
 
