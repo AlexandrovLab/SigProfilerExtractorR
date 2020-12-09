@@ -112,21 +112,20 @@ The list of available functions are:
 
 ### <a name="importdata"></a> importdata
 Imports the path of example data.
-
-```python
-importdata(datatype="matrix")
-```
+importdata(datatype)
+datatype:	
+The type of example data. There are two types: 1."vcf", 2."matrix"
 
 #### importdata Example
 
-```python 
+```R
 from SigProfilerExtractor import sigpro as sig
-path_to_example_table = sig.importdata("matrix")
+path_to_example_table = importdata("matrix")
 data = path_to_example_table 
-# This "data" variable can be used as a parameter of the "project" argument of the sigProfilerExtractor function.
+# This "data" variable can be used as a parameter of the "project" argument of the sigprofilerextractor function.
 
 # To get help on the parameters and outputs of the "importdata" function, please use the following:
-help(sig.importdata)
+help(importdata)
 ```
 
 ### <a name="sigProfilerExtractor"></a> sigProfilerExtractor
