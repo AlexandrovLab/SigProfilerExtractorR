@@ -1,7 +1,6 @@
 
 [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://osf.io/t6j7u/wiki/home/) 
 [![License](https://img.shields.io/badge/License-BSD\%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Build Status](https://travis-ci.com/AlexandrovLab/SigProfilerExtractor.svg?branch=master)](https://travis-ci.com/AlexandrovLab/SigProfilerExtractor)
 
 # SigProfilerExtractorR
 An R wrapper for running the SigProfilerExtractor framework.
@@ -25,11 +24,11 @@ The purpose of this document is to provide a guide for using the SigProfilerExtr
 **PREREQUISITES**
 
 devtools  (R) 
-```
+```R
 >> install.packages("devtools")
 ```
 reticulate* (R) 
-```
+```R
 >> install.packages("reticulate")  
 ```
 
@@ -40,12 +39,12 @@ reticulate* (R)
 This section will guide you through the minimum steps required to extract mutational signatures from genomes:
 1. First, install the python package using pip. The R wrapper still requires the python package:
 ```
-                          pip install sigproextractor
+pip install SigProfilerExtractor
 ```
 2. Open an R session and ensure that your R interpreter recognizes the path to your python installation:
-```
+```R
 $ R
->> library("reticulate")
+>> library(reticulate)
 >> use_python("path_to_your_python")
 >> py_config()
 python:         /anaconda3/bin/python
@@ -58,13 +57,13 @@ numpy_version:  1.16.1
 If you do not see your python path listed, restart your R session and rerun the above commands in order.
 
 2. Install SigProfilerExtractorR using devtools:
-```
->>library("devtools")
+```R
+>>library(devtools)
 >>install_github("AlexandrovLab/SigProfilerExtractorR")
 ```
 3. Load the package in the same R session and install your desired reference genome as follows (available reference genomes are: GRCh37, GRCh38, mm9, and mm10):
-```
->> library("SigProfilerExtractorR")
+```R
+>> library(SigProfilerExtractorR)
 >> install("GRCh37", rsync=FALSE, bash=TRUE)
 ```
 
@@ -78,14 +77,14 @@ Information about supported will be found at https://github.com/AlexandrovLab/Si
 **Quick Example:**
 
 Signatures can be extracted from vcf files or tab delimited mutational table using the sigprofilerextractor function.
-```
+```R
 >> help(sigprofilerextractor)
 ```
 This will show the details about the sigprofilerextractor funtion.
 
 
-```
->> library("SigProfilerExtractorR")
+```R
+>> library(SigProfilerExtractorR)
 >> path_to_example_data <- importdata("matrix")
 >> data <- path_to_example_data # here you can provide the path of your own data
 >> sigprofilerextractor("matrix", 
@@ -111,15 +110,17 @@ The list of available functions are:
 
 
 ### <a name="importdata"></a> importdata
-Imports the path of example data.  
-importdata(datatype).        
-datatype:         	
-The type of example data. There are two types: 1."vcf", 2."matrix".     
+Imports the path of example data.
+```R
+importdata(datatype)
+```
+
+datatype: Type of example data. There are two types: 1. "vcf", 2. "matrix".     
 
 #### importdata Example
 
 ```R
-library("SigProfilerExtractorR")
+library(SigProfilerExtractorR)
 path_to_example_table = importdata("matrix")
 data = path_to_example_table 
 # This "data" variable can be used as a parameter of the "project" argument of the sigprofilerextractor function.
@@ -186,15 +187,15 @@ sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37",
 #### sigProfilerExtractor Example
 ```R    
 
-library("SigProfilerExtractorR")   
+library(SigProfilerExtractorR)   
 # to get input from vcf files.  
-path_to_example_folder_containing_vcf_files = importdata("vcf").   
+path_to_example_folder_containing_vcf_files = importdata("vcf")
 data = path_to_example_folder_containing_vcf_files # you can put the path to your folder containing the vcf samples.  
 sigprofilerextractor("vcf", "example_output", data, minimum_signatures=1, maximum_signatures=10)
 
 
-#Wait untill the excecution is finished. The process may a couple of hours based on the size of the data.
-#Check the current working directory for the "example_output" folder.
+# Wait untill the excecution is finished. The process may a couple of hours based on the size of the data.
+# Check the current working directory for the "example_output" folder.
 
 
 # to get input from table format (mutation catalog matrix)
@@ -309,4 +310,4 @@ If CUDA out of memory exceptions occur, it will be necessary to reduce the numbe
 This software and its documentation are copyright 2018 as a part of the sigProfiler project. The SigProfilerExtractor framework is free software and is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 ## <a name="contact"></a> Contact Information
-Please address any queries or bug reports to S M Ashiqul Islam (Mishu) at m0islam@ucsd.edu
+Please address any queries or bug reports to Mark Barnes at mdbarnes@ucsd.edu or Marcos Díaz-Gay at mdiazgay@ucsd.edu.
