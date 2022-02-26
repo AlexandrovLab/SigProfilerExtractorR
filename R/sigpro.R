@@ -20,7 +20,7 @@
 #' If not random, then seeds will be obtained from a given path of a .txt file that contains a list of seed. \cr
 #' @param matrix_normalization: A string. Method of normalizing the genome matrix before it is analyzed by NMF. Default is "log2". Other options are "gmm", "100X" or "no_normalization". \cr
 #' @param nmf_init: A String. The initialization algorithm for W and H matrix of NMF. Options are 'random', 'nndsvd', 'nndsvda', 'nndsvdar' and 'nndsvd_min'\cr
-#' Default is 'nndsvd_min'.
+#' Default is 'random'.
 #' @param precision: A string. Values should be single or double. Default is single.
 #' @param  min_nmf_iterations: An integer. Value defines the minimum number of iterations to be completed before NMF converges. Default is 10000.
 #' @param  max_nmf_iterations: An integer. Value defines the maximum number of iterations to be completed before NMF converges. Default is 1000000
@@ -40,54 +40,51 @@
 #' @param make_decomposition_plots: Boolean, optional. Defualt is True. If True, Denovo to Cosmic sigantures decompostion plots will be created as a part the results.
 #' @param get_all_signature_matrices: A Boolean. If true, the Ws and Hs from all the NMF iterations are generated in the output.
 #' @param export_probabilities: A Boolean. Defualt is True. If False, then doesn't create the probability matrix.
+#' @param cosmic_version = Float. The genome type. Takes a positive float among 1, 2, 3, 3.1, 3.2. Default is 3.1. Defines the version of COSMIC reference signatures.
+#' @param collapse_to_SBS96 = Boolean. Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context.
 #' @return a folder with results
 #' @export sigprofilerextractor
 #'
 #' @examples
 sigprofilerextractor <- function(input_type,
-                                 output,
-                                 input_data,
-                                 reference_genome="GRCh37",
-                                 opportunity_genome = "GRCh37",
-                                 context_type = "default",
-                                 exome = F,
-                                 minimum_signatures=1,
-                                 maximum_signatures=25,
-                                 nmf_replicates=500,
-                                 resample = T,
-                                 batch_size=1,
-                                 cpu=-1,
-                                 gpu=F,
-                                 nmf_init="random",
-                                 precision= "single",
-                                 matrix_normalization= "gmm",
-                                 seeds= "random",
-                                 min_nmf_iterations= 10000,
-                                 max_nmf_iterations=1000000,
-                                 nmf_test_conv= 10000,
-                                 nmf_tolerance= 1e-15,
-                                 nnls_add_penalty=0.05,
-                                 nnls_remove_penalty=0.01,
-                                 de_novo_fit_penalty=0.02,
-                                 initial_remove_penalty=0.05,
-                                 refit_denovo_signatures=T,
-                                 clustering_distance="cosine",
-                                 export_probabilities=T,
-                                 make_decomposition_plots=T,
-                                 stability=0.8,
-                                 min_stability=0.2,
-                                 combined_stability=1.0,
-                                 get_all_signature_matrices= F) {
+                                     output,
+                                     input_data,
+                                     reference_genome="GRCh37",
+                                     opportunity_genome = "GRCh37",
+                                     context_type = "default",
+                                     exome = F,
+                                     minimum_signatures=1,
+                                     maximum_signatures=25,
+                                     nmf_replicates=500,
+                                     resample = T,
+                                     batch_size=1,
+                                     cpu=-1,
+                                     gpu=F,
+                                     nmf_init="random",
+                                     precision= "single",
+                                     matrix_normalization= "gmm",
+                                     seeds= "random",
+                                     min_nmf_iterations= 10000,
+                                     max_nmf_iterations=1000000,
+                                     nmf_test_conv= 10000,
+                                     nmf_tolerance= 1e-15,
+                                     nnls_add_penalty=0.05,
+                                     nnls_remove_penalty=0.01,
+                                     de_novo_fit_penalty=0.02,
+                                     initial_remove_penalty=0.05,
+                                     refit_denovo_signatures=T,
+                                     clustering_distance="cosine",
+                                     export_probabilities=T,
+                                     make_decomposition_plots=T,
+                                     stability=0.8,
+                                     min_stability=0.2,
+                                     combined_stability=1.0,
+                                     get_all_signature_matrices= F,
+                                     cosmic_version=3.1,
+                                     collapse_to_SBS96=T) {
 
   sys <- reticulate::import("sys")
   sigpro <- reticulate::import("SigProfilerExtractor.sigpro")
-
-
-  #minsigs=as.integer(minsigs)
-  #maxsigs = as.integer(maxsigs)
-  #replicates=as.integer(replicates)
-  #exome=F
-  #cpu = as.integer(cpu)
 
   minimum_signatures=as.integer(minimum_signatures)
   maximum_signatures=as.integer(maximum_signatures)
@@ -105,6 +102,7 @@ sigprofilerextractor <- function(input_type,
   combined_stability=as.numeric(combined_stability)
   batch_size=as.integer(batch_size)
   cpu=as.integer(cpu)
+  cosmic_version=as.numeric(cosmic_version)
 
 
   sigpro$sigProfilerExtractor(input_type,
@@ -140,8 +138,10 @@ sigprofilerextractor <- function(input_type,
                               stability=stability,
                               min_stability=min_stability,
                               combined_stability=combined_stability,
-                              get_all_signature_matrices= get_all_signature_matrices)
-sys$stdout$flush()
+                              get_all_signature_matrices= get_all_signature_matrices,
+                              cosmic_version=cosmic_version,
+                              collapse_to_SBS96=collapse_to_SBS96)
+  sys$stdout$flush()
 }
 
 
@@ -170,6 +170,9 @@ importdata <- function(datatype){
 #' @param output: A string. Path to the output folder.
 #' @param genome_build = A string. The genome type. Example: "GRCh37", "GRCh38", "mm9", "mm10". The default value is "GRCh37"
 #' @param verbose = Boolean. Prints statements. Default value is False.
+#' @param signature_database = String. Path to custom database. Default is NULL.
+#' @param collapse_to_SBS96 = Boolean. Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context.
+#' @param newsignature_threshold = Float. Threshold on cosine similarity to assign a new signature. Default value is 0.8.
 #'
 #' @return A folder with decomposition results The files below will be generated in the output folder: \cr
 #'    \cr
@@ -185,24 +188,27 @@ importdata <- function(datatype){
 #'
 #' @examples
 decomposition <- function(signatures,
-                          activities,
-                          samples,
-                          output,
-                          signature_database=NULL,
-                          nnls_add_penalty=0.05,
-                          nnls_remove_penalty=0.01,
-                          initial_remove_penalty=0.05,
-                          de_novo_fit_penalty=0.02,
-                          genome_build="GRCh37",
-                          refit_denovo_signatures=T,
-                          make_decomposition_plots=T,
-                          connected_sigs=T,
-                          verbose=F){
+                              activities,
+                              samples,
+                              output,
+                              signature_database=NULL,
+                              nnls_add_penalty=0.05,
+                              nnls_remove_penalty=0.01,
+                              initial_remove_penalty=0.05,
+                              de_novo_fit_penalty=0.02,
+                              genome_build="GRCh37",
+                              refit_denovo_signatures=T,
+                              make_decomposition_plots=T,
+                              connected_sigs=T,
+                              verbose=F,
+                              collapse_to_SBS96=T,
+                              newsignature_threshold=0.8){
 
   nnls_add_penalty=as.numeric(nnls_add_penalty)
   nnls_remove_penalty=as.numeric(nnls_remove_penalty)
   de_novo_fit_penalty=as.numeric(de_novo_fit_penalty)
   initial_remove_penalty=as.numeric(initial_remove_penalty)
+  newsignature_threshold=as.numeric(newsignature_threshold)
 
   sys <- reticulate::import("sys")
   decomposition <-reticulate::import("SigProfilerExtractor.decomposition")
@@ -219,7 +225,9 @@ decomposition <- function(signatures,
                                    refit_denovo_signatures=refit_denovo_signatures,
                                    make_decomposition_plots=make_decomposition_plots,
                                    connected_sigs=connected_sigs,
-                                   verbose=verbose)
+                                   verbose=verbose,
+                                   collapse_to_SBS96=collapse_to_SBS96,
+                                   newsignature_threshold=newsignature_threshold)
   sys$stdout$flush()
   return(result)
 

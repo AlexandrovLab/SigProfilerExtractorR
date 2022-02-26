@@ -156,10 +156,10 @@ sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37",
 |  | **maximum_signatures** | Positive Integer | The maximum number of signatures to be extracted. The default value is 25. | 
 |  | **nmf_replicates** | Positive Integer | The number of iteration to be performed to extract each number signature. The default value is 100. | 
 |  | **resample** | Boolean | Default is True. If True, add poisson noise to samples by resampling. | 
-|  | **seeds** | String | It can be used to get reproducible resamples for the NMF replicates. A path of a tab separated .txt file containing the replicated id and preset seeds in a two columns dataframe can be passed through this parameter. The Seeds.txt file in the results folder from a previous analysis can be used for the seeds parameter in a new analysis. The Default value for this parameter is "none". When "none", the seeds for resampling will be random for different analysis. | 
+|  | **seeds** | String | It can be used to get reproducible resamples for the NMF replicates. A path of a tab separated .txt file containing the replicated id and preset seeds in a two columns dataframe can be passed through this parameter. The Seeds.txt file in the results folder from a previous analysis can be used for the seeds parameter in a new analysis. The Default value for this parameter is "random". When "random", the seeds for resampling will be random for different analysis. |
 | **NMF Engines** |  |  |  | 
 |  | **matrix_normalization** | String | Method of normalizing the genome matrix before it is analyzed by NMF. Default is value is "gmm". Other options are, "log2", "custom" or "none". | 
-|  | **nmf_init** | String | The initialization algorithm for W and H matrix of NMF. Options are 'random', 'nndsvd', 'nndsvda', 'nndsvdar' and 'nndsvd_min'. Default is 'nndsvd_min'. | 
+|  | **nmf_init** | String | The initialization algorithm for W and H matrix of NMF. Options are 'random', 'nndsvd', 'nndsvda', 'nndsvdar' and 'nndsvd_min'. Default is 'random'. |
 |  | **precision** | String | Values should be single or double. Default is single. | 
 |  | **min_nmf_iterations** | Integer | Value defines the minimum number of iterations to be completed before NMF converges. Default is 10000. | 
 |  | **max_nmf_iterations** | Integer | Value defines the maximum number of iterations to be completed before NMF converges. Default is 1000000. | 
@@ -167,19 +167,21 @@ sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37",
 |  | **nmf_tolerance** | Float | Value defines the tolerance to achieve to converge. Default is 1e-15. | 
 | **Execution** |  |  |  | 
 |  | **cpu** | Integer | The number of processors to be used to extract the signatures. The default value is -1 which will use all available processors. | 
-|  | **gpu** | Boolean | Defines if the GPU resource will used if available. Default is False. If True, the GPU resources will be used in the computation. | 
+|  | **gpu** | Boolean | Defines if the GPU resource will used if available. Default is False. If True, the GPU resources will be used in the computation. *Note: All available CPU processors are used by default, which may cause a memory error. This error can be resolved by reducing the number of CPU processes through the **cpu** parameter.*|
 |  | **batch_size** | Integer | Will be effective only if the GPU is used. Defines the number of NMF replicates to be performed by each CPU during the parallel processing. Default is 1. | 
 | **Solution Estimation Thresholds** |  |  |  | 
 |  | **stability** | Float | Default is 0.8. The cutoff thresh-hold of the average stability. Solutions with average stabilities below this thresh-hold will not be considered. | 
 |  | **min_stability** | Float | Default is 0.2. The cutoff thresh-hold of the minimum stability. Solutions with minimum stabilities below this thresh-hold will not be considered.  | 
 |  | **combined_stability** | Float | Default is 1.0. The cutoff thresh-hold of the combined stability (sum of average and minimum stability). Solutions with combined stabilities below this thresh-hold will not be considered. | 
 | **Decomposition** |  |  |  | 
+|  | **cosmic_version** | Float | Takes a positive float among 1, 2, 3, 3.1, 3.2. Default is 3.1. Defines the version of COSMIC reference signatures. |
 |  | **de_novo_fit_penalty** | Float | Takes any positive float. Default is 0.02. Defines the weak (remove) thresh-hold cutoff to assign denovo signatures to a sample. | 
 |  | **nnls_add_penalty** | Float | Takes any positive float. Default is 0.05. Defines the strong (add) thresh-hold cutoff to assign COSMIC signatures to a sample. | 
 |  | **nnls_remove_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to assign COSMIC signatures to a sample. | 
 |  | **initial_remove_penalty** | Float | Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to COSMIC assign signatures to a sample. | 
 |  | **refit_denovo_signatures** | Boolean | Default is True. If True, then refit the denovo signatures with nnls. | 
 |  | **make_decomposition_plots** | Boolean | Defualt is True. If True, Denovo to Cosmic sigantures decompostion plots will be created as a part the results. | 
+|  | **collapse_to_SBS96** | Boolean | Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context. |
 | **Others** |  |  |  | 
 |  | **get_all_signature_matrices** | Boolean | If True, the Ws and Hs from all the NMF iterations are generated in the output. | 
 |  | **export_probabilities** | Boolean | Defualt is True. If False, then doesn't create the probability matrix. | 
@@ -267,12 +269,15 @@ decompose(signatures, activities, samples,  output, signature_database=None, nnl
 | **activities** | String | Path to a tab delimilted file that contains the activity table where the rows are sample IDs and colunms are signature IDs. |
 | **samples** | String | Path to a tab delimilted file that contains the activity table where the rows are mutation types and colunms are sample IDs. |
 | **output** | String | Path to the output folder. |
+| **signature_database** | String or None | Path to custom database. Default is None  |
 | **de_novo_fit_penalty** | Float | Takes any positive float. Default is 0.02. Defines the weak (remove) thresh-hold cutoff to be assigned denovo signatures to a sample. Optional parameter. |
 | **nnls_add_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to be assigned COSMIC signatures to a sample. Optional parameter. |
 | **nnls_remove_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to be assigned COSMIC signatures to a sample. Optional parameter. |
 | **initial_remove_penalty** | Float | Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to be COSMIC assigned signatures to a sample. Optional parameter. |
 | **genome_build** | String | The genome type. Example: "GRCh37", "GRCh38", "mm9", "mm10". The default value is "GRCh37" |
 | **verbose** | Boolean | Prints statements. Default value is False.  |
+| **collapse_to_SBS96** | Boolean |  It collapses the signatures of context type 288 and 1536 to 96. Use False if your custom signature database is 288 or 1536 and signatures are also of the same context type other than 96. Default value is True. |
+| **newsignature_threshold** | Float |  Threshold on cosine similarity to assign a new signature. Default value is 0.8. |
         
 #### Decompose Example
 ```R
