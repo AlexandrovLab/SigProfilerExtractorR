@@ -13,9 +13,9 @@ The purpose of this document is to provide a guide for using the SigProfilerExtr
 - [Installation](#installation)
 - [Functions](#Functions)
   - [importdata](#importdata)
-  - [sigProfilerExtractor](#sigProfilerExtractor)
+  - [sigprofilerextractor](#sigprofilerextractor)
   - [estimate_solution](#estimate_solution)
-  - [decompose](#decompose)
+- [Citation](#citation)
 - [Copyright](#copyright)
 - [Contact Information](#contact)
 
@@ -106,7 +106,6 @@ The list of available functions are:
 - importdata
 - sigprofilerextractor
 - estimate_solution
-- decompose
 
 
 ### <a name="importdata"></a> importdata
@@ -129,26 +128,31 @@ data = path_to_example_table
 help(importdata)
 ```
 
-### <a name="sigProfilerExtractor"></a> sigProfilerExtractor
+### <a name="sigprofilerextractor"></a> sigprofilerextractor
     
 Extracts mutational signatures from an array of samples.
 
 ```R 
-sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37", opportunity_genome = "GRCh37", context_type = "default", exome = False, 
-                         minimum_signatures=1, maximum_signatures=10, nmf_replicates=100, resample = True, batch_size=1, cpu=-1, gpu=False, 
-                         nmf_init="alexandrov-lab-custom", precision= "single", matrix_normalization= "100X", seeds= "none", 
-                         min_nmf_iterations= 10000, max_nmf_iterations=1000000, nmf_test_conv= 10000, nmf_tolerance= 1e-15,nnls_add_penalty=0.05,
-                         nnls_remove_penalty=0.01, initial_remove_penalty=0.05, de_novo_fit_penalty=0.02,get_all_signature_matrices= False)
+sigprofilerextractor(input_type, output, input_data, reference_genome="GRCh37",
+                     opportunity_genome = "GRCh37", context_type = "default",
+                     exome = False, minimum_signatures=1, maximum_signatures=10,
+                     nmf_replicates=100, resample = T, batch_size=1, cpu=-1,
+                     gpu=F, nmf_init="random", precision= "single",
+                     matrix_normalization= "gmm", seeds= "random",
+                     min_nmf_iterations= 10000, max_nmf_iterations=1000000,
+                     nmf_test_conv= 10000, nmf_tolerance= 1e-15,
+                     nnls_add_penalty=0.05, nnls_remove_penalty=0.01,
+                     initial_remove_penalty=0.05, get_all_signature_matrices= False)
 ```
 
 | Category | Parameter | Variable Type | Parameter Description |
 | --------- | --------------------- | -------- |-------- |
 | **Input Data** |  |  | |
-|  | **input_type** | String | The type of input:<br><ul><li>"vcf": used for vcf format inputs.</li><li>"matrix": used for table format inputs using a tab seperated file.</li></ul> |
-|  | **out_put** | String | The name of the output folder. The output folder will be generated in the current working directory.  |   
-|  | **input_data** | String | Name of the input folder (in case of "vcf" type input) or the input file (in case of "table"  type input). The project file or folder should be inside the current working directory. For the "vcf" type input, the project has to be a folder which will contain the vcf files in vcf format or text formats. The "text" type projects have to be a file. | 
+|  | **input_type** | String | The type of input:<br><ul><li>"vcf": used for vcf format inputs.</li><li>"matrix": used for table format inputs using a tab seperated file.</li><li>"bedpe": used for bedpe file with each SV annotated with its type, size bin, and clustered/non-clustered status.</li><li>"seg:TYPE": used for a multi-sample segmentation file for copy number analysis. The accepted callers for TYPE are the following {"ASCAT", "ASCAT_NGS", "SEQUENZA", "ABSOLUTE", "BATTENBERG", "FACETS", "PURPLE", "TCGA"}. For example, when using segmentation file from BATTENBERG then set input_type to "seg:BATTENBERG".</li></ul> |
+|  | **output** | String | The name of the output folder. The output folder will be generated in the current working directory.  |
+|  | **input_data** | String | <br>Path to input folder for input_type:<ul><li>vcf</li><li>bedpe</li></ul>Path to file for input_type:<ul><li>matrix</li><li>seg:TYPE</li></ul> |
 |  | **reference_genome** | String | The name of the reference genome. The default reference genome is "GRCh37". This parameter is applicable only if the input_type is "vcf". | 
-|  | **opportunity_genome** | String | The build or version of the reference signatures for the reference genome. The default opportunity genome is GRCh37. If the input_type is "vcf", the genome_build automatically matches the input reference genome value. | 
+|  | **opportunity_genome** | String | The build or version of the reference genome for the reference signatures. The default opportunity genome is GRCh37. If the input_type is "vcf", the opportunity_genome automatically matches the input reference genome value. Only the genomes available in COSMIC are supported (GRCh37, GRCh38, mm9, mm10 and rn6). If a different opportunity genome is selected, the default genome GRCh37 will be used. | 
 |  | **context_type** | String | A string of mutaion context name/names separated by comma (","). The items in the list defines the mutational contexts to be considered to extract the signatures. The default value is "96,DINUC,ID", where "96" is the SBS96 context, "DINUC" is the DINUCLEOTIDE context and ID is INDEL context. | 
 |  | **exome** | Boolean | Defines if the exomes will be extracted. The default value is "False".  | 
 | **NMF Replicates** |  |  |  | 
@@ -156,10 +160,10 @@ sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37",
 |  | **maximum_signatures** | Positive Integer | The maximum number of signatures to be extracted. The default value is 25. | 
 |  | **nmf_replicates** | Positive Integer | The number of iteration to be performed to extract each number signature. The default value is 100. | 
 |  | **resample** | Boolean | Default is True. If True, add poisson noise to samples by resampling. | 
-|  | **seeds** | String | It can be used to get reproducible resamples for the NMF replicates. A path of a tab separated .txt file containing the replicated id and preset seeds in a two columns dataframe can be passed through this parameter. The Seeds.txt file in the results folder from a previous analysis can be used for the seeds parameter in a new analysis. The Default value for this parameter is "random". When "random", the seeds for resampling will be random for different analysis. |
+|  | **seeds** | String | It can be used to get reproducible resamples for the NMF replicates. A path of a tab separated .txt file containing the replicated id and preset seeds in a two columns dataframe can be passed through this parameter. The Seeds.txt file in the results folder from a previous analysis can be used for the seeds parameter in a new analysis. The Default value for this parameter is "random". When "random", the seeds for resampling will be random for different analysis. | 
 | **NMF Engines** |  |  |  | 
 |  | **matrix_normalization** | String | Method of normalizing the genome matrix before it is analyzed by NMF. Default is value is "gmm". Other options are, "log2", "custom" or "none". | 
-|  | **nmf_init** | String | The initialization algorithm for W and H matrix of NMF. Options are 'random', 'nndsvd', 'nndsvda', 'nndsvdar' and 'nndsvd_min'. Default is 'random'. |
+|  | **nmf_init** | String | The initialization algorithm for W and H matrix of NMF. Options are 'random', 'nndsvd', 'nndsvda', 'nndsvdar' and 'nndsvd_min'. Default is 'random'. | 
 |  | **precision** | String | Values should be single or double. Default is single. | 
 |  | **min_nmf_iterations** | Integer | Value defines the minimum number of iterations to be completed before NMF converges. Default is 10000. | 
 |  | **max_nmf_iterations** | Integer | Value defines the maximum number of iterations to be completed before NMF converges. Default is 1000000. | 
@@ -173,20 +177,20 @@ sigprofilerextractor(input_type, out_put, input_data, reference_genome="GRCh37",
 |  | **stability** | Float | Default is 0.8. The cutoff thresh-hold of the average stability. Solutions with average stabilities below this thresh-hold will not be considered. | 
 |  | **min_stability** | Float | Default is 0.2. The cutoff thresh-hold of the minimum stability. Solutions with minimum stabilities below this thresh-hold will not be considered.  | 
 |  | **combined_stability** | Float | Default is 1.0. The cutoff thresh-hold of the combined stability (sum of average and minimum stability). Solutions with combined stabilities below this thresh-hold will not be considered. | 
+|  | **allow_stability_drop** | Boolean | Default is False. Defines if solutions with a drop in stability with respect to the highest stable number of signatures will be considered. | 
 | **Decomposition** |  |  |  | 
-|  | **cosmic_version** | Float | Takes a positive float among 1, 2, 3, 3.1, 3.2. Default is 3.1. Defines the version of COSMIC reference signatures. |
-|  | **de_novo_fit_penalty** | Float | Takes any positive float. Default is 0.02. Defines the weak (remove) thresh-hold cutoff to assign denovo signatures to a sample. | 
-|  | **nnls_add_penalty** | Float | Takes any positive float. Default is 0.05. Defines the strong (add) thresh-hold cutoff to assign COSMIC signatures to a sample. | 
-|  | **nnls_remove_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to assign COSMIC signatures to a sample. | 
-|  | **initial_remove_penalty** | Float | Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to COSMIC assign signatures to a sample. | 
+|  | **cosmic_version** | Float | Takes a positive float among 1, 2, 3, 3.1, 3.2 and 3.3. Default is 3.3. Defines the version of the COSMIC reference signatures. | 
+|  | **nnls_add_penalty** | Float | Takes any positive float. Default is 0.05. Defines the strong (add) thresh-hold cutoff to assign signatures to a sample. | 
+|  | **nnls_remove_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to assign signatures to a sample. | 
+|  | **initial_remove_penalty** | Float | Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to assign COSMIC signatures to a sample. | 
 |  | **refit_denovo_signatures** | Boolean | Default is True. If True, then refit the denovo signatures with nnls. | 
 |  | **make_decomposition_plots** | Boolean | Defualt is True. If True, Denovo to Cosmic sigantures decompostion plots will be created as a part the results. | 
-|  | **collapse_to_SBS96** | Boolean | Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context. |
+|  | **collapse_to_SBS96** | Boolean | Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context. 
 | **Others** |  |  |  | 
 |  | **get_all_signature_matrices** | Boolean | If True, the Ws and Hs from all the NMF iterations are generated in the output. | 
 |  | **export_probabilities** | Boolean | Defualt is True. If False, then doesn't create the probability matrix. | 
     
-#### sigProfilerExtractor Example
+#### sigprofilerextractor Example
 ```R    
 
 library(SigProfilerExtractorR)   
@@ -206,11 +210,11 @@ data = path_to_example_table # you can put the path to your tab delimited file c
 sigprofilerextractor("matrix", "example_output", data, opportunity_genome="GRCh38", minimum_signatures=1,maximum_signatures=10)
 ```
 
-#### sigProfilerExtractor Output
+#### sigprofilerextractor Output
 To learn about the output, please visit https://osf.io/t6j7u/wiki/home/
   
 
-### <a name="estimate_solution"></a> Estimation of the Optimum Solution
+### <a name="estimate_solution"></a> Estimation of the Optimum Solution (estimate_solution)
 Estimate the optimum solution (rank) among different number of solutions (ranks). 
 
 ```R
@@ -235,7 +239,7 @@ estimate_solution(base_csvfile,
 | **min_stability** | Float | Default is 0.2. The cutoff thresh-hold of the minimum stability. Solutions with minimum stabilities below this thresh-hold will not be considered. |
 | **combined_stability** | Float | Default is 1.0. The cutoff thresh-hold of the combined stability (sum of average and minimum stability). Solutions with combined stabilities below this thresh-hold will not be considered. |
         
-#### Estimation of the Optimum Solution Example
+#### estimate_solution Example
 ```R 
 estimate_solution(base_csvfile="All_solutions_stat.csv", 
           All_solution="All_Solutions", 
@@ -247,7 +251,7 @@ estimate_solution(base_csvfile="All_solutions_stat.csv",
           combined_stability=1.25)
 ```                
 
-#### Estimation of the Optimum Solution Output
+#### estimate_solution Output
 The files below will be generated in the output folder:
 | File Name | Description |
 | ----- | ----- |
@@ -255,61 +259,14 @@ The files below will be generated in the output folder:
 | **selection_plot.pdf** | A plot that depict the Stability and Mean Sample Cosine Distance for different solutions. |
 
 
-### <a name="decompose"></a> Decompose
-
-Decomposes the De Novo Signatures into COSMIC Signatures and assigns COSMIC signatures into samples
-
-```R 
-decompose(signatures, activities, samples,  output, signature_database=None, nnls_add_penalty=0.05, nnls_remove_penalty=0.01, initial_remove_penalty=0.05, de_novo_fit_penalty=0.02, genome_build="GRCh37", refit_denovo_signatures=True, make_decomposition_plots=True, connected_sigs=True, verbose=False)
-``` 
-
-| Parameter | Variable Type | Parameter Description |
-| --------------------- | -------- |-------- |
-| **signatures** | String | Path to a  tab delimited file that contains the signaure table where the rows are mutation types and colunms are signature IDs. |
-| **activities** | String | Path to a tab delimilted file that contains the activity table where the rows are sample IDs and colunms are signature IDs. |
-| **samples** | String | Path to a tab delimilted file that contains the activity table where the rows are mutation types and colunms are sample IDs. |
-| **output** | String | Path to the output folder. |
-| **signature_database** | String or None | Path to custom database. Default is None  |
-| **de_novo_fit_penalty** | Float | Takes any positive float. Default is 0.02. Defines the weak (remove) thresh-hold cutoff to be assigned denovo signatures to a sample. Optional parameter. |
-| **nnls_add_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to be assigned COSMIC signatures to a sample. Optional parameter. |
-| **nnls_remove_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to be assigned COSMIC signatures to a sample. Optional parameter. |
-| **initial_remove_penalty** | Float | Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to be COSMIC assigned signatures to a sample. Optional parameter. |
-| **genome_build** | String | The genome type. Example: "GRCh37", "GRCh38", "mm9", "mm10". The default value is "GRCh37" |
-| **verbose** | Boolean | Prints statements. Default value is False.  |
-| **collapse_to_SBS96** | Boolean |  It collapses the signatures of context type 288 and 1536 to 96. Use False if your custom signature database is 288 or 1536 and signatures are also of the same context type other than 96. Default value is True. |
-| **newsignature_threshold** | Float |  Threshold on cosine similarity to assign a new signature. Default value is 0.8. |
-        
-#### Decompose Example
-```R
-signatures = "path/to/De_Novo_Solution_Signatures.txt"
-activities="path/to/De_Novo_Solution_Activities.txt"
-samples="path/to/Samples.txt"
-output="name or path/to/output"
-decompose(signatures, activities, samples, output, genome_build="GRCh37", verbose=False)
-```   
-
-#### Decompose Output   
-Values:
-  The files below will be generated in the output folder:
-  - comparison_with_global_ID_signatures.csv
-  - Decomposed_Solution_Activities.txt
-  - Decomposed_Solution_Samples_stats.txt
-  - Decomposed_Solution_Signatures.txt
-  - decomposition_logfile.txt
-  - dendogram.pdf
-  - Mutation_Probabilities.txt
-  - Signature_assaignment_logfile.txt
-  - Signature_plot[MutatutionContext]_plots_Decomposed_Solution.pdf
-        
-### <a name="plotActivity"></a> Activity Stacked Bar Plot
-Generates a stacked bar plot showing activities in individuals
-
-
 ### GPU support
 
 If CUDA out of memory exceptions occur, it will be necessary to reduce the number of CPU processes used (the `cpu` parameter).
 
 #### For more information, help, and examples, please visit: https://osf.io/t6j7u/wiki/home/
+
+## <a name="citation"></a> Citation
+Islam SMA, Díaz-Gay M, Wu Y, Barnes M, Vangara R, Bergstrom EN, He Y, Vella M, Wang J, Teague JW, Clapham P, Moody S, Senkin S, Li YR, Riva L, Zhang T, Gruber AJ, Steele CD, Otlu B, Khandekar A, Abbasi A, Humphreys L, Syulyukina N, Brady SW, Alexandrov BS, Pillay N, Zhang J, Adams DJ, Martincorena I, Wedge DC, Landi MT, Brennan P, Stratton MR, Rozen SG, and Alexandrov LB (2022) Uncovering novel mutational signatures by _de novo_ extraction with SigProfilerExtractor. __Cell Genomics__. doi: [10.1016/j.xgen.2022.100179](https://doi.org/10.1016/j.xgen.2022.100179).
 
 ## <a name="copyright"></a> Copyright
 This software and its documentation are copyright 2018 as a part of the sigProfiler project. The SigProfilerExtractor framework is free software and is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
