@@ -1,7 +1,7 @@
 Package: SigProfilerExtractorR
 Type: Package
 Title: Extracts Mutational Signatures from Cancer Genomes and Decompose the Signatures into Global Signatures
-Version: 1.1.8
+Version: 1.1.13
 Author: S M Ashiqul Islam (Mishu)
 Maintainer: Marcos Díaz-Gay <mdiazgay@health.ucsd.edu>
 Description: SigProfilerExtractorR allows de novo extraction of mutational signatures from data generated in a matrix format. 

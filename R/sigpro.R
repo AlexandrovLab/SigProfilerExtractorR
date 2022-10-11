@@ -7,14 +7,14 @@
 #' ----- "matrix": used for matrix/table format inputs using a tab seperated file.\cr
 
 #' @param output A string. The name of the output folder. The output folder will be generated in the current working directory.\cr
-#' @param inputdata A string. Name/path of the input folder (in case of "vcf" type input) or the input file (in case of "matrix"  type input).\cr
+#' @param input_data A string. Name/path of the input folder (in case of "vcf" type input) or the input file (in case of "matrix"  type input).\cr
 #' @param reference_genome: A string, optional. The name of the reference genome. The default reference genome is "GRCh37". This parameter is applicable only if the input_type is "vcf".\cr
 #' @param opportunity_genome: The build or version of the reference signatures for the reference genome. The default opportunity genome is GRCh37. If the input_type is "vcf", the genome_build automatically matches the input reference genome value.\cr
 #' @param context_type: A list of strings, optional. The items in the list defines the mutational contexts to be considered to extract the signatures. The default value is "SBS96,DBS78,ID83".\cr
 #' @param exome: Boolean, optional. Defines if the exomes will be extracted. The default value is "False".\cr
 #' @param minimum_signature: A positive integer, optional. The minimum number of signatures to be extracted. The default value is 1.\cr
 #' @param maximum_signatures: A positive integer, optional. The maximum number of signatures to be extracted. The default value is 25.\cr
-#' @param nmf_replicates: A positive integer, optional. The number of iteration to be performed to extract each number signature. The default value is 500. \cr
+#' @param nmf_replicates: A positive integer, optional. The number of iteration to be performed to extract each number signature. The default value is 100. \cr
 #' @param resample: Boolean, optional. Default is True. If True, add poisson noise to samples by resampling.\cr
 #' @param seeds: Boolean. Default is "random". If random, then the seeds for resampling will be random for different analysis.\cr
 #' If not random, then seeds will be obtained from a given path of a .txt file that contains a list of seed. \cr
@@ -32,7 +32,7 @@
 #' @param stability: A float. Default is 0.8. The cutoff thresh-hold of the average stability. Solutions with average stabilities below this thresh-hold will not be considered.
 #' @param min_stability: A float. Default is 0.2. The cutoff thresh-hold of the minimum stability. Solutions with minimum stabilities below this thresh-hold will not be considered.
 #' @param combined_stability: A float. Default is 1.0. The cutoff thresh-hold of the combined stability (sum of average and minimum stability). Solutions with combined stabilities below this thresh-hold will not be considered.
-#' @param de_novo_fit_penalty: Float, optional. Takes any positive float. Default is 0.02. Defines the weak (remove) thresh-hold cutoff to be assigned denovo signatures to a sample.
+#' @param allow_stability_drop: Boolean, optional. Default is False. Defines if solutions with a drop in stability with respect to the highest stable number of signatures will be considered.
 #' @param nnls_add_penalty: Float, optional. Takes any positive float. Default is 0.05. Defines the strong (add) thresh-hold cutoff to be assigned COSMIC signatures to a sample.
 #' @param nnls_remove_penalty: Float, optional. Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to be assigned COSMIC signatures to a sample.
 #' @param initial_remove_penalty: Float, optional. Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to be COSMIC assigned signatures to a sample.
@@ -70,7 +70,6 @@ sigprofilerextractor <- function(input_type,
                                      nmf_tolerance= 1e-15,
                                      nnls_add_penalty=0.05,
                                      nnls_remove_penalty=0.01,
-                                     de_novo_fit_penalty=0.02,
                                      initial_remove_penalty=0.05,
                                      refit_denovo_signatures=T,
                                      clustering_distance="cosine",
@@ -80,7 +79,7 @@ sigprofilerextractor <- function(input_type,
                                      min_stability=0.2,
                                      combined_stability=1.0,
                                      get_all_signature_matrices= F,
-                                     cosmic_version=3.1,
+                                     cosmic_version=3.3,
                                      collapse_to_SBS96=T) {
 
   sys <- reticulate::import("sys")
@@ -95,7 +94,6 @@ sigprofilerextractor <- function(input_type,
   nmf_test_conv= as.integer(nmf_test_conv)
   nnls_add_penalty=as.numeric(nnls_add_penalty)
   nnls_remove_penalty=as.numeric(nnls_remove_penalty)
-  de_novo_fit_penalty=as.numeric(de_novo_fit_penalty)
   initial_remove_penalty=as.numeric(initial_remove_penalty)
   stability=as.numeric(stability)
   min_stability=as.numeric(min_stability)
@@ -129,7 +127,6 @@ sigprofilerextractor <- function(input_type,
                               nmf_tolerance= nmf_tolerance,
                               nnls_add_penalty=nnls_add_penalty,
                               nnls_remove_penalty=nnls_remove_penalty,
-                              de_novo_fit_penalty=de_novo_fit_penalty,
                               initial_remove_penalty=initial_remove_penalty,
                               refit_denovo_signatures=refit_denovo_signatures,
                               clustering_distance=clustering_distance,
@@ -162,78 +159,6 @@ importdata <- function(datatype){
 
 
 
-#' decomposition
-#' @description Decomposes the De Novo Signatures to Cosmic Signatures
-#' @param signatures: A string. Path to a  tab delimited file that contains the signaure table where the rows are mutation types and colunms are signature IDs.
-#' @param activities: A string. Path to a tab delimilted file that contains the activity table where the rows are sample IDs and colunms are signature IDs.
-#' @param samples: A string. Path to a tab delimilted file that contains the activity table where the rows are mutation types and colunms are sample IDs.
-#' @param output: A string. Path to the output folder.
-#' @param genome_build = A string. The genome type. Example: "GRCh37", "GRCh38", "mm9", "mm10". The default value is "GRCh37"
-#' @param verbose = Boolean. Prints statements. Default value is False.
-#' @param signature_database = String. Path to custom database. Default is NULL.
-#' @param collapse_to_SBS96 = Boolean. Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context.
-#' @param newsignature_threshold = Float. Threshold on cosine similarity to assign a new signature. Default value is 0.8.
-#'
-#' @return A folder with decomposition results The files below will be generated in the output folder: \cr
-#'    \cr
-#'    1.comparison_with_global_ID_signatures.csv \cr
-#     2.Decomposed_Solution_Activities.txt \cr
-#'    3.Decomposed_Solution_Samples_stats.txt \cr
-#'    4.Decomposed_Solution_Signatures.txt \cr
-#'    5.decomposition_logfile.txt \cr
-#'    6.Mutation_Probabilities.txt \cr
-#'    7.Signature_assaignment_logfile.txt \cr
-#'    8.Signature_plot[MutatutionContext]_plots_Decomposed_Solution.pdf
-#' @export decomposition
-#'
-#' @examples
-decomposition <- function(signatures,
-                              activities,
-                              samples,
-                              output,
-                              signature_database=NULL,
-                              nnls_add_penalty=0.05,
-                              nnls_remove_penalty=0.01,
-                              initial_remove_penalty=0.05,
-                              de_novo_fit_penalty=0.02,
-                              genome_build="GRCh37",
-                              refit_denovo_signatures=T,
-                              make_decomposition_plots=T,
-                              connected_sigs=T,
-                              verbose=F,
-                              collapse_to_SBS96=T,
-                              newsignature_threshold=0.8){
-
-  nnls_add_penalty=as.numeric(nnls_add_penalty)
-  nnls_remove_penalty=as.numeric(nnls_remove_penalty)
-  de_novo_fit_penalty=as.numeric(de_novo_fit_penalty)
-  initial_remove_penalty=as.numeric(initial_remove_penalty)
-  newsignature_threshold=as.numeric(newsignature_threshold)
-
-  sys <- reticulate::import("sys")
-  decomposition <-reticulate::import("SigProfilerExtractor.decomposition")
-  result = decomposition$decompose(signatures,
-                                   activities,
-                                   samples,
-                                   output,
-                                   signature_database=signature_database,
-                                   nnls_add_penalty=nnls_add_penalty,
-                                   nnls_remove_penalty=nnls_remove_penalty,
-                                   initial_remove_penalty=initial_remove_penalty,
-                                   de_novo_fit_penalty=de_novo_fit_penalty,
-                                   genome_build="GRCh37",
-                                   refit_denovo_signatures=refit_denovo_signatures,
-                                   make_decomposition_plots=make_decomposition_plots,
-                                   connected_sigs=connected_sigs,
-                                   verbose=verbose,
-                                   collapse_to_SBS96=collapse_to_SBS96,
-                                   newsignature_threshold=newsignature_threshold)
-  sys$stdout$flush()
-  return(result)
-
-}
-
-
 #' Model_Selection
 #' @description Decomposes the De Novo Signatures to Cosmic Signatures
 #' @param signatures: A string. Path to a  tab delimited file that contains the signaure table where the rows are mutation types and colunms are signature IDs.
@@ -256,6 +181,7 @@ decomposition <- function(signatures,
 #' @export decomposition
 #'
 #' @examples
+
 
 
 estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
@@ -291,10 +217,6 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
   return(results)
 
 }
-
-
-
-
 
 
 
