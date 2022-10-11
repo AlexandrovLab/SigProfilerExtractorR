@@ -15,7 +15,7 @@
 #' @param minimum_signature: A positive integer, optional. The minimum number of signatures to be extracted. The default value is 1.\cr
 #' @param maximum_signatures: A positive integer, optional. The maximum number of signatures to be extracted. The default value is 25.\cr
 #' @param nmf_replicates: A positive integer, optional. The number of iteration to be performed to extract each number signature. The default value is 500. \cr
-#' @param  resample: Boolean, optional. Default is True. If True, add poisson noise to samples by resampling.\cr
+#' @param resample: Boolean, optional. Default is True. If True, add poisson noise to samples by resampling.\cr
 #' @param seeds: Boolean. Default is "random". If random, then the seeds for resampling will be random for different analysis.\cr
 #' If not random, then seeds will be obtained from a given path of a .txt file that contains a list of seed. \cr
 #' @param matrix_normalization: A string. Method of normalizing the genome matrix before it is analyzed by NMF. Default is "log2". Other options are "gmm", "100X" or "no_normalization". \cr
@@ -55,7 +55,7 @@ sigprofilerextractor <- function(input_type,
                                      exome = F,
                                      minimum_signatures=1,
                                      maximum_signatures=25,
-                                     nmf_replicates=500,
+                                     nmf_replicates=100,
                                      resample = T,
                                      batch_size=1,
                                      cpu=-1,
