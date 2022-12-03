@@ -36,12 +36,12 @@
 #' @param nnls_add_penalty: Float, optional. Takes any positive float. Default is 0.05. Defines the strong (add) thresh-hold cutoff to be assigned COSMIC signatures to a sample.
 #' @param nnls_remove_penalty: Float, optional. Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to be assigned COSMIC signatures to a sample.
 #' @param initial_remove_penalty: Float, optional. Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to be COSMIC assigned signatures to a sample.
-#' @param refit_denovo_signatures: Boolean, optional. Default is False. If True, then refit the denovo signatures with nnls.
 #' @param make_decomposition_plots: Boolean, optional. Defualt is True. If True, Denovo to Cosmic sigantures decompostion plots will be created as a part the results.
 #' @param get_all_signature_matrices: A Boolean. If true, the Ws and Hs from all the NMF iterations are generated in the output.
 #' @param export_probabilities: A Boolean. Defualt is True. If False, then doesn't create the probability matrix.
-#' @param cosmic_version = Float. The genome type. Takes a positive float among 1, 2, 3, 3.1, 3.2. Default is 3.1. Defines the version of COSMIC reference signatures.
-#' @param collapse_to_SBS96 = Boolean. Defualt is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context.
+#' @param cosmic_version: Float. The genome type. Takes a positive float among 1, 2, 3, 3.1, 3.2. Default is 3.1. Defines the version of COSMIC reference signatures.
+#' @param collapse_to_SBS96: Boolean. Default is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context.
+#' @param allow_stability_drop: Boolean, optional. Default is False. Defines if solutions with a drop in stability with respect to the highest stable number of signatures will be considered.
 #' @return a folder with results
 #' @export sigprofilerextractor
 #'
@@ -51,6 +51,7 @@ sigprofilerextractor <- function(input_type,
                                      input_data,
                                      reference_genome="GRCh37",
                                      opportunity_genome = "GRCh37",
+                                     cosmic_version=3.3,
                                      context_type = "default",
                                      exome = F,
                                      minimum_signatures=1,
@@ -71,16 +72,15 @@ sigprofilerextractor <- function(input_type,
                                      nnls_add_penalty=0.05,
                                      nnls_remove_penalty=0.01,
                                      initial_remove_penalty=0.05,
-                                     refit_denovo_signatures=T,
+                                     collapse_to_SBS96=T,
                                      clustering_distance="cosine",
                                      export_probabilities=T,
                                      make_decomposition_plots=T,
                                      stability=0.8,
                                      min_stability=0.2,
                                      combined_stability=1.0,
-                                     get_all_signature_matrices= F,
-                                     cosmic_version=3.3,
-                                     collapse_to_SBS96=T) {
+                                     allow_stability_drop=F,
+                                     get_all_signature_matrices= F) {
 
   sys <- reticulate::import("sys")
   sigpro <- reticulate::import("SigProfilerExtractor.sigpro")
@@ -108,6 +108,7 @@ sigprofilerextractor <- function(input_type,
                               input_data,
                               reference_genome=reference_genome,
                               opportunity_genome = opportunity_genome,
+                              cosmic_version=cosmic_version,
                               context_type = context_type,
                               exome = exome,
                               minimum_signatures=minimum_signatures,
@@ -128,16 +129,15 @@ sigprofilerextractor <- function(input_type,
                               nnls_add_penalty=nnls_add_penalty,
                               nnls_remove_penalty=nnls_remove_penalty,
                               initial_remove_penalty=initial_remove_penalty,
-                              refit_denovo_signatures=refit_denovo_signatures,
+                              collapse_to_SBS96=collapse_to_SBS96,
                               clustering_distance=clustering_distance,
                               export_probabilities=export_probabilities,
                               make_decomposition_plots=make_decomposition_plots,
                               stability=stability,
                               min_stability=min_stability,
                               combined_stability=combined_stability,
-                              get_all_signature_matrices= get_all_signature_matrices,
-                              cosmic_version=cosmic_version,
-                              collapse_to_SBS96=collapse_to_SBS96)
+                              allow_stability_drop=allow_stability_drop,
+                              get_all_signature_matrices=get_all_signature_matrices)
   sys$stdout$flush()
 }
 
