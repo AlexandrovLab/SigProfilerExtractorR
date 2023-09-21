@@ -18,7 +18,7 @@
 #' @param resample: Boolean, optional. Default is True. If True, add poisson noise to samples by resampling.\cr
 #' @param seeds: Boolean. Default is "random". If random, then the seeds for resampling will be random for different analysis.\cr
 #' If not random, then seeds will be obtained from a given path of a .txt file that contains a list of seed. \cr
-#' @param matrix_normalization: A string. Method of normalizing the genome matrix before it is analyzed by NMF. Default is "log2". Other options are "gmm", "100X" or "no_normalization". \cr
+#' @param matrix_normalization: A string. Method of normalizing the genome matrix before it is analyzed by NMF. Default is "gmm". Other options are "gmm", "100X" or "no_normalization". \cr
 #' @param nmf_init: A String. The initialization algorithm for W and H matrix of NMF. Options are 'random', 'nndsvd', 'nndsvda', 'nndsvdar' and 'nndsvd_min'\cr
 #' Default is 'random'.
 #' @param precision: A string. Values should be single or double. Default is single.
