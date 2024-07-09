@@ -39,7 +39,7 @@
 #' @param make_decomposition_plots: Boolean, optional. Defualt is True. If True, Denovo to Cosmic sigantures decompostion plots will be created as a part the results.
 #' @param get_all_signature_matrices: A Boolean. If true, the Ws and Hs from all the NMF iterations are generated in the output.
 #' @param export_probabilities: A Boolean. Defualt is True. If False, then doesn't create the probability matrix.
-#' @param cosmic_version: Float. The genome type. Takes a positive float among 1, 2, 3, 3.1, 3.2. Default is 3.1. Defines the version of COSMIC reference signatures.
+#' @param cosmic_version: Float. The genome type. Takes a positive float among 1, 2, 3, 3.1, 3.2, 3.3, and 3.4. Default is 3.4. Defines the version of COSMIC reference signatures.
 #' @param collapse_to_SBS96: Boolean. Default is True. If True, SBS288 and SBS1536 Denovo signatures will be mapped to SBS96 reference signatures. If False, those will be mapped to reference signatures of the same context.
 #' @param allow_stability_drop: Boolean, optional. Default is False. Defines if solutions with a drop in stability with respect to the highest stable number of signatures will be considered.
 #' @return a folder with results
@@ -51,7 +51,7 @@ sigprofilerextractor <- function(input_type,
                                      input_data,
                                      reference_genome="GRCh37",
                                      opportunity_genome = "GRCh37",
-                                     cosmic_version=3.3,
+                                     cosmic_version=3.4,
                                      context_type = "default",
                                      exome = F,
                                      minimum_signatures=1,
@@ -100,8 +100,20 @@ sigprofilerextractor <- function(input_type,
   combined_stability=as.numeric(combined_stability)
   batch_size=as.integer(batch_size)
   cpu=as.integer(cpu)
-  cosmic_version=as.numeric(cosmic_version)
 
+# Validate cosmic_version
+valid_versions <- c("1", "2", "3", "3.1", "3.2", "3.3", "3.4")
+cosmic_version <- as.character(cosmic_version)
+
+if (cosmic_version %in% valid_versions) {
+  if (cosmic_version %in% c("1","2", "3")) {
+    cosmic_version <- as.integer(cosmic_version)  # Convert to integer for whole number versions
+  } else {
+    cosmic_version <- as.numeric(cosmic_version)  # Convert to numeric for float versions
+  }
+} else {
+  stop("Invalid cosmic_version. Valid versions are 1, 2, 3, 3.1, 3.2, 3.3, and 3.4")
+}
 
   sigpro$sigProfilerExtractor(input_type,
                               output,
@@ -141,8 +153,6 @@ sigprofilerextractor <- function(input_type,
   sys$stdout$flush()
 }
 
-
-
 #' Title
 #'
 #' @param datatype The type of example data. There are two types: 1."table", 2."vcf"
@@ -156,8 +166,6 @@ importdata <- function(datatype){
   project = sigpro$importdata(datatype)
   return(project)
 }
-
-
 
 #' Model_Selection
 #' @description Decomposes the De Novo Signatures to Cosmic Signatures
@@ -181,9 +189,6 @@ importdata <- function(datatype){
 #' @export decomposition
 #'
 #' @examples
-
-
-
 estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
                   All_solution="All_Solutions",
                   genomes="Samples.txt",
@@ -215,10 +220,7 @@ estimate_solution<- function(base_csvfile="All_solutions_stat.csv",
 
   sys$stdout$flush()
   return(results)
-
 }
-
-
 
 #' Title
 #'
