@@ -179,7 +179,7 @@ sigprofilerextractor(input_type, output, input_data, reference_genome="GRCh37",
 |  | **combined_stability** | Float | Default is 1.0. The cutoff thresh-hold of the combined stability (sum of average and minimum stability). Solutions with combined stabilities below this thresh-hold will not be considered. | 
 |  | **allow_stability_drop** | Boolean | Default is False. Defines if solutions with a drop in stability with respect to the highest stable number of signatures will be considered. | 
 | **Decomposition** |  |  |  | 
-|  | **cosmic_version** | Float | Takes a positive float among 1, 2, 3, 3.1, 3.2 and 3.3. Default is 3.3. Defines the version of the COSMIC reference signatures. | 
+|  | **cosmic_version** | Float | Takes a positive float among 1, 2, 3, 3.1, 3.2, 3.3, and 3.4. Default is 3.4. Defines the version of the COSMIC reference signatures. |
 |  | **nnls_add_penalty** | Float | Takes any positive float. Default is 0.05. Defines the strong (add) thresh-hold cutoff to assign signatures to a sample. | 
 |  | **nnls_remove_penalty** | Float | Takes any positive float. Default is 0.01. Defines the weak (remove) thresh-hold cutoff to assign signatures to a sample. | 
 |  | **initial_remove_penalty** | Float | Takes any positive float. Default is 0.05. Defines the initial weak (remove) thresh-hold cutoff to assign COSMIC signatures to a sample. | 
